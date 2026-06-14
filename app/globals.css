@@ -1,3 +1,464 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  .career-ui {
+    font-family: var(--font-career-sans), 'Avenir Next', 'Segoe UI', 'Helvetica Neue', Arial,
+      sans-serif;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    --career-leading-body: 1.55;
+    --career-leading-heading: 1.2;
+    --career-letter-tight: -0.018em;
+    --career-meta-tracking: 0.08em;
+    --career-ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --career-ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --career-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --career-stagger-step: 90ms;
+    --career-bg: oklch(98.9% 0.003 248);
+    --career-bg-strong: oklch(97.6% 0.007 244);
+    --career-surface: oklch(99.3% 0.003 248 / 0.98);
+    --career-surface-solid: oklch(99.6% 0.002 248);
+    --career-surface-soft: oklch(98% 0.006 244);
+    --career-line: oklch(90.6% 0.008 244 / 0.88);
+    --career-line-strong: oklch(84.8% 0.012 244 / 0.96);
+    --career-ink: oklch(29% 0.03 249);
+    --career-ink-muted: oklch(46% 0.025 245);
+    --career-ink-subtle: oklch(62% 0.019 243);
+    --career-accent: oklch(46% 0.045 250);
+    --career-accent-strong: oklch(35% 0.04 250);
+    --career-accent-soft: oklch(96.4% 0.01 246);
+    --career-accent-ghost: oklch(46% 0.045 250 / 0.06);
+    --career-focus-ring: oklch(46% 0.045 250 / 0.12);
+    --career-success-soft: oklch(96.9% 0.015 162);
+    --career-success-ink: oklch(43% 0.06 164);
+    --career-warning-soft: oklch(97.2% 0.018 85);
+    --career-warning-ink: oklch(49% 0.06 80);
+    --career-danger-soft: oklch(96.8% 0.014 24);
+    --career-danger-ink: oklch(46% 0.07 24);
+    --career-info-soft: oklch(96.8% 0.012 245);
+    --career-info-ink: oklch(42% 0.05 246);
+  }
+
+  .career-ui :where(h1, h2, h3) {
+    line-height: var(--career-leading-heading);
+    letter-spacing: var(--career-letter-tight);
+  }
+
+  .career-ui :where(p, li, dd, dt) {
+    line-height: var(--career-leading-body);
+  }
+
+  .career-ui :where(.font-mono, code, pre, kbd, samp) {
+    font-family: var(--font-career-mono), 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
+      'Courier New', monospace;
+    font-kerning: none;
+  }
+
+  .career-ui ::selection {
+    background: rgba(86, 119, 168, 0.18);
+    color: var(--career-ink);
+  }
+
+  .career-ui :where(button, a, input, textarea, select) {
+    transition-duration: 180ms;
+    transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+    transition-timing-function: var(--career-ease-out-quint);
+  }
+
+  .career-ui :where(button, [href], input, textarea, select):focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--career-focus-ring);
+  }
+}
+
+@layer components {
+  @keyframes career-fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0) scale(0.995);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes career-stream-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 7px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes career-soft-pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      opacity: 0.86;
+      transform: translate3d(0, 0, 0) scale(0.992);
+    }
+  }
+
+  .career-page-title {
+    color: var(--career-ink);
+    font-size: clamp(1.4rem, 1.15rem + 0.75vw, 1.75rem);
+    font-weight: 650;
+  }
+
+  .career-page-subtitle {
+    color: var(--career-ink-muted);
+    font-size: 0.98rem;
+    line-height: var(--career-leading-body);
+    max-width: 70ch;
+  }
+
+  .career-section-title {
+    color: var(--career-ink);
+    font-size: 1.12rem;
+    font-weight: 620;
+  }
+
+  .career-meta-label {
+    color: var(--career-accent-strong);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--career-meta-tracking);
+  }
+
+  .career-panel {
+    background: color-mix(in srgb, var(--career-surface-solid) 96%, var(--career-accent-soft) 4%);
+    border: 1px solid var(--career-line);
+    border-radius: 18px;
+    box-shadow: 0 10px 24px -20px rgba(22, 32, 51, 0.16);
+  }
+
+  .career-panel-soft {
+    background: color-mix(in srgb, var(--career-surface-soft) 97%, white 3%);
+    border: 1px solid var(--career-line);
+    border-radius: 16px;
+    box-shadow: 0 8px 18px -18px rgba(22, 32, 51, 0.1);
+  }
+
+  .career-table-shell {
+    background: color-mix(in srgb, var(--career-surface-solid) 98%, var(--career-accent-soft) 2%);
+    border: 1px solid var(--career-line);
+    border-radius: 18px;
+    box-shadow: 0 10px 24px -22px rgba(22, 32, 51, 0.14);
+  }
+
+  .career-button-primary,
+  .career-button-secondary,
+  .career-button-danger,
+  .career-button-ghost {
+    align-items: center;
+    border-radius: 12px;
+    display: inline-flex;
+    font-size: 0.92rem;
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1;
+    min-height: 40px;
+    padding: 0.675rem 0.95rem;
+  }
+
+  .career-button-primary {
+    background: var(--career-accent-strong);
+    border: 1px solid color-mix(in srgb, var(--career-accent-strong) 88%, black 12%);
+    box-shadow: 0 8px 16px -14px rgba(22, 32, 51, 0.24);
+    color: white;
+  }
+
+  .career-button-secondary {
+    background: var(--career-surface-solid);
+    border: 1px solid var(--career-line-strong);
+    color: var(--career-ink-muted);
+  }
+
+  .career-button-danger {
+    background: color-mix(in srgb, var(--career-danger-soft) 78%, white 22%);
+    border: 1px solid color-mix(in srgb, var(--career-danger-ink) 12%, white 88%);
+    color: var(--career-danger-ink);
+  }
+
+  .career-button-ghost {
+    color: var(--career-ink-muted);
+    min-height: auto;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .career-button-secondary:hover:enabled,
+  .career-button-ghost:hover:enabled {
+    background: var(--career-surface-soft);
+  }
+
+  .career-button-danger:hover:enabled {
+    background: color-mix(in srgb, var(--career-danger-soft) 70%, white 30%);
+  }
+
+  .career-button-primary:disabled,
+  .career-button-secondary:disabled,
+  .career-button-danger:disabled,
+  .career-button-ghost:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .career-input,
+  .career-select,
+  .career-textarea {
+    background: var(--career-surface-solid);
+    border: 1px solid var(--career-line-strong);
+    border-radius: 12px;
+    color: var(--career-ink);
+    font-size: 0.92rem;
+    min-height: 44px;
+    padding: 0.75rem 0.95rem;
+    width: 100%;
+  }
+
+  .career-input::placeholder,
+  .career-textarea::placeholder {
+    color: var(--career-ink-subtle);
+  }
+
+  .career-textarea {
+    line-height: 1.6;
+    resize: vertical;
+  }
+
+  .career-checkbox {
+    accent-color: var(--career-accent);
+    border-color: var(--career-line-strong);
+    border-radius: 0.35rem;
+    color: var(--career-accent);
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .career-pill,
+  .career-pill-muted,
+  .career-pill-success,
+  .career-pill-warning,
+  .career-pill-danger {
+    align-items: center;
+    border: 1px solid var(--career-line);
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: 0.72rem;
+    font-weight: 600;
+    gap: 0.3rem;
+    line-height: 1;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .career-pill {
+    background: color-mix(in srgb, var(--career-accent-soft) 88%, white 12%);
+    color: var(--career-info-ink);
+  }
+
+  .career-pill-muted {
+    background: var(--career-surface-soft);
+    color: var(--career-ink-muted);
+  }
+
+  .career-pill-success {
+    background: var(--career-success-soft);
+    color: var(--career-success-ink);
+  }
+
+  .career-pill-warning {
+    background: var(--career-warning-soft);
+    color: var(--career-warning-ink);
+  }
+
+  .career-pill-danger {
+    background: var(--career-danger-soft);
+    color: var(--career-danger-ink);
+  }
+
+  .career-alert {
+    border-radius: 14px;
+    border-width: 1px;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    padding: 0.85rem 1rem;
+  }
+
+  .career-alert-success {
+    background: var(--career-success-soft);
+    border-color: color-mix(in srgb, var(--career-success-ink) 16%, white);
+    color: var(--career-success-ink);
+  }
+
+  .career-alert-error {
+    background: var(--career-danger-soft);
+    border-color: color-mix(in srgb, var(--career-danger-ink) 16%, white);
+    color: var(--career-danger-ink);
+  }
+
+  .career-inline-empty {
+    background: color-mix(in srgb, var(--career-surface-soft) 98%, white 2%);
+    border: 1px solid var(--career-line);
+    border-radius: 18px;
+    color: var(--career-ink-muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    padding: 1rem 1rem 1.05rem;
+  }
+
+  .career-empty-state {
+    background: color-mix(in srgb, var(--career-surface-solid) 98%, white 2%);
+    border: 1px dashed var(--career-line-strong);
+    border-radius: 18px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  .career-panel-danger {
+    background: color-mix(in srgb, var(--career-surface-solid) 92%, var(--career-danger-soft) 8%);
+    border: 1px solid color-mix(in srgb, var(--career-danger-ink) 16%, white 84%);
+    border-radius: 18px;
+    box-shadow: 0 10px 24px -20px rgba(22, 32, 51, 0.16);
+  }
+
+  .career-muted-link {
+    color: var(--career-accent);
+    font-weight: 600;
+  }
+
+  .career-muted-link:hover {
+    color: var(--career-accent-strong);
+  }
+
+  .career-motion-stage > * {
+    opacity: 0;
+    animation: career-fade-up 520ms var(--career-ease-out-expo) forwards;
+    animation-delay: calc(var(--career-order, 0) * var(--career-stagger-step));
+  }
+
+  .career-motion-stage > *:nth-child(1) {
+    --career-order: 0;
+  }
+
+  .career-motion-stage > *:nth-child(2) {
+    --career-order: 1;
+  }
+
+  .career-motion-stage > *:nth-child(3) {
+    --career-order: 2;
+  }
+
+  .career-motion-stage > *:nth-child(4) {
+    --career-order: 3;
+  }
+
+  .career-motion-stage > *:nth-child(5) {
+    --career-order: 4;
+  }
+
+  .career-motion-stage > *:nth-child(6) {
+    --career-order: 5;
+  }
+
+  .career-surface {
+    transition:
+      border-color 220ms var(--career-ease-out-quart),
+      background-color 220ms var(--career-ease-out-quart);
+  }
+
+  .career-ui button {
+    transform: translate3d(0, 0, 0);
+    transition:
+      transform 170ms var(--career-ease-out-quint),
+      box-shadow 210ms var(--career-ease-out-quart),
+      color 210ms var(--career-ease-out-quart),
+      background-color 210ms var(--career-ease-out-quart),
+      border-color 210ms var(--career-ease-out-quart);
+  }
+
+  .career-ui button:not(:disabled):hover {
+    transform: none;
+  }
+
+  .career-ui button:not(:disabled):active {
+    transform: none;
+  }
+
+  .career-ui :where(input, select, textarea) {
+    transition:
+      border-color 190ms var(--career-ease-out-quart),
+      box-shadow 190ms var(--career-ease-out-quart),
+      background-color 190ms var(--career-ease-out-quart);
+  }
+
+  .career-ui :where(input, select, textarea):focus-visible {
+    box-shadow: 0 0 0 3px rgb(15 23 42 / 0.08);
+  }
+
+  .career-ui button[data-busy='true'] {
+    animation: career-soft-pulse 1.15s var(--career-ease-out-quart) infinite;
+  }
+
+  .career-nav-link {
+    transition:
+      transform 190ms var(--career-ease-out-quint),
+      background-color 220ms var(--career-ease-out-quart),
+      color 220ms var(--career-ease-out-quart),
+      box-shadow 220ms var(--career-ease-out-quart);
+  }
+
+  .career-nav-link:hover {
+    transform: none;
+  }
+
+  .career-action-link {
+    transform: translate3d(0, 0, 0);
+    transition:
+      transform 180ms var(--career-ease-out-quint),
+      color 210ms var(--career-ease-out-quart),
+      background-color 210ms var(--career-ease-out-quart),
+      border-color 210ms var(--career-ease-out-quart);
+  }
+
+  .career-action-link:hover {
+    transform: none;
+  }
+
+  .career-stream-line {
+    opacity: 0;
+    animation: career-stream-in 260ms var(--career-ease-out-quint) forwards;
+    animation-delay: calc(var(--career-stream-order, 0) * 42ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .career-ui :where(button, a, input, textarea, select) {
+      transition: none !important;
+    }
+
+    .career-motion-stage > *,
+    .career-stream-line,
+    .career-ui button[data-busy='true'] {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .career-ui button,
+    .career-surface,
+    .career-nav-link,
+    .career-action-link {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+}

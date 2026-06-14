@@ -10,11 +10,21 @@
     "export": "tsx --env-file=.env scripts/export.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.85.0",
+    "@sparticuz/chromium": "^143.0.4",
+    "@tanstack/react-query": "^5.96.2",
+    "cheerio": "^1.2.0",
+    "mammoth": "^1.12.0",
     "next": "^15.3.0",
     "node-cron": "^3.0.3",
+    "openai": "^6.33.0",
+    "pdf-parse": "^2.4.5",
     "pg": "^8.13.3",
+    "puppeteer-core": "^24.40.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

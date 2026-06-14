@@ -8,8 +8,10 @@ import { run as runHimalayas } from './scrapers/himalayas';
 import { run as runRemotive } from './scrapers/remotive';
 import { run as runYc } from './scrapers/yc';
 
-const SEARCH_BASE =
-  'https://api.adplist.org/search?disciplines=front-end&expertise=engineering&provider=v2&q=&session_types=mentorship&topic=Frontend%20Development&type=mentors';
+const SEARCH_SOURCES = [
+  'https://api.adplist.org/search?disciplines=front-end&expertise=engineering&provider=v2&q=&session_types=mentorship&topic=Frontend%20Development&type=mentors',
+  'https://api.adplist.org/search?disciplines=product-management&expertise=product&provider=v2&q=&session_types=mentorship&topic=Product%20Management&type=mentors',
+];
 const PROFILE_BASE = 'https://api.adplist.org/users/profile/mentor';
 
 function categorise(title: string): ScrapedJob['category'] | null {
@@ -61,11 +63,11 @@ async function inBatches<T, R>(
 
 // ─── ADPList scraping ─────────────────────────────────────────────────────────
 
-async function fetchAllMentorSlugs(): Promise<SearchResult[]> {
+async function fetchSlugsFromSource(searchBase: string): Promise<SearchResult[]> {
   const all: SearchResult[] = [];
   let page = 1;
   while (true) {
-    const res = await fetch(`${SEARCH_BASE}&page=${page}`);
+    const res = await fetch(`${searchBase}&page=${page}`);
     if (!res.ok) { pipelineLog(`[ERROR] search page ${page} failed: ${res.status}`); break; }
     const body = await res.json();
     const results: SearchResult[] = body.results ?? body ?? [];
@@ -74,7 +76,19 @@ async function fetchAllMentorSlugs(): Promise<SearchResult[]> {
     if (results.length < 36) break;
     page++;
   }
-  pipelineLog(`[pipeline] fetched ${all.length} mentor slugs across ${page} pages`);
+  pipelineLog(`[pipeline] fetched ${all.length} slugs from source`);
+  return all;
+}
+
+async function fetchAllMentorSlugs(): Promise<SearchResult[]> {
+  const [frontend, pm] = await Promise.all(SEARCH_SOURCES.map(fetchSlugsFromSource));
+  // Deduplicate by slug
+  const seen = new Set<string>();
+  const all: SearchResult[] = [];
+  for (const r of [...frontend, ...pm]) {
+    if (!seen.has(r.slug)) { seen.add(r.slug); all.push(r); }
+  }
+  pipelineLog(`[pipeline] ${all.length} total unique mentor slugs (frontend: ${frontend.length}, pm: ${pm.length})`);
   return all;
 }
 
